@@ -18,11 +18,11 @@ contract Ownable {
     }
     //  2) create an internal constructor that sets the _owner var to the creater of the contract 
 
-    function constructor() public {
+    constructor() public {
         _owner = msg.sender;
     }
     //  3) create an 'onlyOwner' modifier that throws if called by any account other than the owner.
-    modifier ownlyOwner()
+    modifier onlyOwner()
     {
         require(msg.sender == _owner, "Caller is not contract owner");
         _;
@@ -58,7 +58,7 @@ contract Pausable is Ownable{
         }
     }
     //  3) create an internal constructor that sets the _paused variable to false
-    function constructor() public {
+    constructor() public {
         _paused = false;
     }
     //  4) create 'whenNotPaused' & 'paused' modifier that throws in the appropriate situation
@@ -461,11 +461,15 @@ contract ERC721Enumerable is ERC165, ERC721 {
     }
 }
 
-contract ERC721Metadata is ERC721Enumerable, usingOraclize {
+contract ERC721Metadata is ERC721Enumerable, usingOraclize{
     
     // TODO: Create private vars for token _name, _symbol, and _baseTokenURI (string)
+    string private _name;
+    string private _symbol;
+    string private _baseTokenURI;
 
     // TODO: create private mapping of tokenId's to token uri's called '_tokenURIs'
+    mapping(uint256 => string) private _tokenURIs;
 
     bytes4 private constant _INTERFACE_ID_ERC721_METADATA = 0x5b5e139f;
     /*
@@ -478,11 +482,17 @@ contract ERC721Metadata is ERC721Enumerable, usingOraclize {
 
     constructor (string memory name, string memory symbol, string memory baseTokenURI) public {
         // TODO: set instance var values
+        _name = name;
+        _symbol = symbol;
+        _baseTokenURI = baseTokenURI;
 
         _registerInterface(_INTERFACE_ID_ERC721_METADATA);
     }
 
     // TODO: create external getter functions for name, symbol, and baseTokenURI
+    function name() public returns(string memory) {return _name;}
+    function symbol() public returns(string memory) {return _symbol;}
+    function baseTokenURI() public returns(string memory) {return _baseTokenURI;}
 
     function tokenURI(uint256 tokenId) external view returns (string memory) {
         require(_exists(tokenId));
@@ -490,23 +500,33 @@ contract ERC721Metadata is ERC721Enumerable, usingOraclize {
     }
 
 
-    // TODO: Create an internal function to set the tokenURI of a specified tokenId
-    // It should be the _baseTokenURI + the tokenId in string form
-    // TIP #1: use strConcat() from the imported oraclizeAPI lib to set the complete token URI
-    // TIP #2: you can also use uint2str() to convert a uint to a string
-        // see https://github.com/oraclize/ethereum-api/blob/master/oraclizeAPI_0.5.sol for strConcat()
-    // require the token exists before setting
+
+    function setTokenURI(uint256 tokenId) external {
+        // TODO: Create an internal function to set the tokenURI of a specified tokenId
+        // It should be the _baseTokenURI + the tokenId in string form
+        // TIP #1: use strConcat() from the imported oraclizeAPI lib to set the complete token URI
+        // TIP #2: you can also use uint2str() to convert a uint to a string
+            // see https://github.com/oraclize/ethereum-api/blob/master/oraclizeAPI_0.5.sol for strConcat()
+        // require the token exists before setting
+        require(_exists(tokenId));
+        // _tokenURIs[tokenId] = strConcat(_baseTokenURI, uint2str(tokenId));
+    }
 
 }
 
 //  TODO's: Create CustomERC721Token contract that inherits from the ERC721Metadata contract. You can name this contract as you please
-//  1) Pass in appropriate values for the inherited ERC721Metadata contract
-//      - make the base token uri: https://s3-us-west-2.amazonaws.com/udacity-blockchain/capstone/
-//  2) create a public mint() that does the following:
-//      -can only be executed by the contract owner
-//      -takes in a 'to' address, tokenId, and tokenURI as parameters
-//      -returns a true boolean upon completion of the function
-//      -calls the superclass mint and setTokenURI functions
+contract ERC721MintableComplete is ERC721Metadata{
+    constructor(string memory name, string memory symbol, string memory baseTokenURI) public ERC721Metadata(name, symbol, baseTokenURI)  {
+            // Child construction code goes here
+    }
+    //  1) Pass in appropriate values for the inherited ERC721Metadata contract
+    //      - make the base token uri: https://s3-us-west-2.amazonaws.com/udacity-blockchain/capstone/
+    //  2) create a public mint() that does the following:
+    //      -can only be executed by the contract owner
+    //      -takes in a 'to' address, tokenId, and tokenURI as parameters
+    //      -returns a true boolean upon completion of the function
+    //      -calls the superclass mint and setTokenURI functions
+}
 
 
 
