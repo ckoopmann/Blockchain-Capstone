@@ -540,7 +540,7 @@ contract ERC721MintableComplete is ERC721Metadata{
             //  1) Pass in appropriate values for the inherited ERC721Metadata contract
             //      - make the base token uri: https://s3-us-west-2.amazonaws.com/udacity-blockchain/capstone/
     }
-    function mint(address to, uint256 tokenId) public returns(bool){
+    function mint(address to, uint256 tokenId) public onlyOwner returns(bool){
         //  2) create a public mint() that does the following:
         //      -can only be executed by the contract owner
         //      -takes in a 'to' address, tokenId, and tokenURI as parameters
