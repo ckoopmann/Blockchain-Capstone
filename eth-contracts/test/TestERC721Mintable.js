@@ -80,8 +80,21 @@ contract("TestERC721Mintable", (accounts) => {
       });
     });
 
-    it("should fail when minting when address is not contract owner", async function () {});
+    it("should fail when minting when address is not contract owner", async function () {
+      let failed = false;
+      const tokenId = 10;
+      try {
+        await this.contract.mint(account_one, tokenId, { from: account_two });
+      } catch {
+        failed = true;
+      }
 
-    it("should return contract owner", async function () {});
+      assert.equal(failed, true, "Minting from non owner was not prevented");
+    });
+
+    it("should return contract owner", async function () {
+      const owner = await this.contract.getOwner.call();
+      assert.equal(owner, account_one, "Wrong owner was returned");
+    });
   });
 });
