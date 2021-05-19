@@ -1,6 +1,4 @@
 var ERC721MintableComplete = artifacts.require("ERC721MintableComplete");
-var ERC721Metadata = artifacts.require("ERC721Metadata");
-var ERC721Enumerable = artifacts.require("ERC721Enumerable");
 
 contract("TestERC721Mintable", (accounts) => {
   const account_one = accounts[0];
