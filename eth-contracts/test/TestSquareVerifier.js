@@ -5,6 +5,7 @@
 
 // Test verification with incorrect proof
 var verifier = artifacts.require("verifier");
+var correctSolution = require("../../zokrates/code/square/proof.json");
 
 contract("TestVerifier", (accounts) => {
   const account_one = accounts[0];
@@ -17,6 +18,41 @@ contract("TestVerifier", (accounts) => {
     });
 
     it("should verify correct solution", async function () {
+      console.log(correctSolution);
+      let result = await this.contract.verifyTx(
+        correctSolution.proof.A,
+        correctSolution.proof.A_p,
+        correctSolution.proof.B,
+        correctSolution.proof.B_p,
+        correctSolution.proof.C,
+        correctSolution.proof.C_p,
+        correctSolution.proof.H,
+        correctSolution.proof.K,
+        correctSolution.input
+      );
+      assert.equal(
+        result.logs[0].event,
+        "Verified",
+        "Correct solution was not verified"
+      );
+    });
+
+    it("should not verify incorrect solution", async function () {
+      let incorrectSolution = correctSolution;
+      incorrectSolution.proof.A_p = correctSolution.proof.B_p;
+      console.log(incorrectSolution);
+      let result = await this.contract.verifyTx(
+        incorrectSolution.proof.A,
+        incorrectSolution.proof.A_p,
+        incorrectSolution.proof.B,
+        incorrectSolution.proof.B_p,
+        incorrectSolution.proof.C,
+        incorrectSolution.proof.C_p,
+        incorrectSolution.proof.H,
+        incorrectSolution.proof.K,
+        incorrectSolution.input
+      );
+      assert.equal(result.logs.length, 0, "Incorrect solution was verified");
     });
   });
 });
