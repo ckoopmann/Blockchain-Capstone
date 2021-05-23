@@ -18,10 +18,11 @@
  *
  */
 
-const HDWalletProvider = require("truffle-hdwallet-provider");
-const fs = require("fs");
-const mnemonic = fs.readFileSync(".secret").toString().trim();
-const infuraKey = fs.readFileSync(".infura").toString().trim();
+// TODO: REMOVE COMMENT TO DEPLOY ON RINKEBY
+// const HDWalletProvider = require("truffle-hdwallet-provider");
+// const fs = require("fs");
+// const mnemonic = fs.readFileSync(".secret").toString().trim();
+// const infuraKey = fs.readFileSync(".infura").toString().trim();
 
 module.exports = {
   /**
@@ -59,16 +60,17 @@ module.exports = {
 
     // Useful for deploying to a public network.
     // NB: It's important to wrap the provider as a function.
-    rinkeby: {
-      provider: () =>
-        new HDWalletProvider(
-          mnemonic,
-          `https://rinkeby.infura.io/v3/${infuraKey}`
-        ),
-      network_id: 4, // rinkeby's id
-      gas: 4500000, // rinkeby has a lower block limit than mainnet
-      gasPrice: 10000000000,
-    },
+    // TODO: REMOVE COMMENT TO DEPLOY ON RINKEBY
+    // rinkeby: {
+    //   provider: () =>
+    //     new HDWalletProvider(
+    //       mnemonic,
+    //       `https://rinkeby.infura.io/v3/${infuraKey}`
+    //     ),
+    //   network_id: 4, // rinkeby's id
+    //   gas: 4500000, // rinkeby has a lower block limit than mainnet
+    //   gasPrice: 10000000000,
+    // },
 
     // Useful for private networks
     // private: {

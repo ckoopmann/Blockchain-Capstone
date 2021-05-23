@@ -5,7 +5,7 @@
 
 // Test verification with incorrect proof
 var verifier = artifacts.require("verifier");
-var correctSolution = require("../../zokrates/code/square/proof.json");
+var correctSolution = require("../../zokrates/code/square/proofs/proof_1.json");
 
 contract("TestVerifier", (accounts) => {
   const account_one = accounts[0];
