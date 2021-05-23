@@ -18,8 +18,7 @@ contract("TestVerifier", (accounts) => {
     });
 
     it("should verify correct solution", async function () {
-      console.log(correctSolution);
-      let result = await this.contract.verifyTx(
+      let result = await this.contract.verifyTx.call(
         correctSolution.proof.A,
         correctSolution.proof.A_p,
         correctSolution.proof.B,
@@ -30,17 +29,12 @@ contract("TestVerifier", (accounts) => {
         correctSolution.proof.K,
         correctSolution.input
       );
-      assert.equal(
-        result.logs[0].event,
-        "Verified",
-        "Correct solution was not verified"
-      );
+      assert.equal(result, true, "Valid solution was not verified")
     });
 
     it("should not verify incorrect solution", async function () {
-      let incorrectSolution = correctSolution;
+      let incorrectSolution = JSON.parse(JSON.stringify(correctSolution));;
       incorrectSolution.proof.A_p = correctSolution.proof.B_p;
-      console.log(incorrectSolution);
       let result = await this.contract.verifyTx(
         incorrectSolution.proof.A,
         incorrectSolution.proof.A_p,
